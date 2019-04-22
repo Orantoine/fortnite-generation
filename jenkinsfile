@@ -4,6 +4,10 @@ pipeline {
         maven 'Maven 3.3.9'
         jdk 'jdk8'
     }
+    environment {
+        registry = "orantoine/fortnite-generation"
+        registryCredential = 'dockerhub'
+    }
     stages {
         stage ('Initialize') {
             steps {
@@ -16,7 +20,14 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'mvn -Dmaven.test.failure.ignore=true install'
+                sh 'mvn clean install'
+            }
+        }
+        stage('Post'){
+            steps{
+                script {
+                        docker.build registry + ":$BUILD_NUMBER"
+                }
             }
         }
     }
