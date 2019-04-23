@@ -29,7 +29,7 @@ public class ResultatDay {
     private PlayerRepository playerRepository;
 
     @GetMapping(value = "/resultat/{pseudo}/{mode}")
-    public Resume getDayForMode(@PathVariable String pseudo, @PathVariable(required = false) String mode){
+    public Resume getDay(@PathVariable String pseudo,@PathVariable(required = false) String mode){
         Resume resume = new Resume();
         Player player = playerRepository.findByPseudo(pseudo);
         if (player != null) {
@@ -54,4 +54,25 @@ public class ResultatDay {
         }
         return resume;
     }
+    @GetMapping(value = "/resultat/{pseudo}")
+    public Resume getDayForMode(@PathVariable String pseudo){
+        Resume resume = new Resume();
+        Player player = playerRepository.findByPseudo(pseudo);
+        if (player != null) {
+            resume.setPlayerId(player.getAccountid());
+            resume.setPlayerMatchs(matchsRepository.findAllByAccountIdOrderByDateCollectedDesc(player.getAccountid()));
+            log.info("Aucun mode n'a été choisi");
+            GetInfo getInfo = new GetInfo(resume.getPlayerMatchs());
+            resume.setMatchs(getInfo.findNbMatch());
+            resume.setWins(getInfo.findWins());
+            resume.setRatio(getInfo.findRatio());
+            resume.setUpdateDate(new Date());
+            log.info("Envoie des informations");
+        }else{
+            log.error("Pseudo du joueur inconnu : " +pseudo);
+            resume.setPlayerName("Le pseudo : " + pseudo + " est inconnu. Vérifier son existance dans la bdd ou contacter notre administrateur");
+        }
+        return resume;
+    }
+
 }
