@@ -1,13 +1,11 @@
 package fr.Orantoine.fortnitegeneration.controllers;
 
 
-import fr.Orantoine.fortnitegeneration.models.Match;
 import fr.Orantoine.fortnitegeneration.models.Player;
 import fr.Orantoine.fortnitegeneration.models.Resume;
 import fr.Orantoine.fortnitegeneration.repositories.MatchsRepository;
 import fr.Orantoine.fortnitegeneration.repositories.PlayerRepository;
 import fr.Orantoine.fortnitegeneration.services.GetInfo;
-import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.PermitAll;
-import java.util.*;
+import java.util.Date;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -59,6 +56,7 @@ public class InfoDay {
         }
         return resume;
     }
+
     @GetMapping(value = "/infoplayer/{pseudo}/{mode}")
     public Resume getDataForMode(@PathVariable String pseudo, @PathVariable String mode){
         log.info("Request type get : /infoplayer/{pseudo}/{mode}");
