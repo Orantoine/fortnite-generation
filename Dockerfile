@@ -5,6 +5,6 @@ MAINTAINER antoine.godeau@sfr.fr
 VOLUME /tmp
 COPY target/*.jar fortnite-generation.jar
 
-EXPOSE 8080
+EXPOSE 8091
 
 ENTRYPOINT ["java","-jar","/fortnite-generation.jar"]
