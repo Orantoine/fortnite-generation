@@ -1,44 +1,38 @@
 package fr.Orantoine.fortnitegeneration.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.annotation.Generated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.util.Date;
 import java.util.List;
-
+@Document(collection = "Day")
 public class Resume {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public String id;
-
-    public String playerId;
-
-    public String playerName;
-
-    public Date updateDate;
-
-    public int matchs;
-
-    public float ratio;
-
-    public int wins;
-
-    public List<Match> playerMatchs;
+    private String id;
+    private String accountName;
+    private Date day;
+    private float kills;
+    private float matchs;
+    private float ratio;
+    private int wins;
+    private String accountid;
+    private Match[] listMatchs;
 
 
-    public Resume(String id, String playerId, String playerName, List<Match> playerMatchs, Date updateDate, int matchs, float ratio, int wins) {
+    public Resume(String id,String accountName,Date day, float kills, float matchs, float ratio, int duo, int solo, int section, int wins, String accountid, Match[] listMatch) {
         this.id = id;
-        this.playerId = playerId;
-        this.playerName = playerName;
-        this.playerMatchs = playerMatchs;
-        this.updateDate = updateDate;
+        this.accountName = accountName;
+        this.day = day;
+        this.kills = kills;
         this.matchs = matchs;
         this.ratio = ratio;
         this.wins = wins;
+        this.accountid = accountid;
+        this.listMatchs = listMatch;
     }
 
     public Resume() {
@@ -52,43 +46,27 @@ public class Resume {
         this.id = id;
     }
 
-    public String getPlayerId() {
-        return playerId;
+    public Date getDay() {
+        return day;
     }
 
-    public void setPlayerId(String playerId) {
-        this.playerId = playerId;
+    public void setDay(Date day) {
+        this.day = day;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public float getKills() {
+        return kills;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setKills(float kills) {
+        this.kills = kills;
     }
 
-    public List<Match> getPlayerMatchs() {
-        return playerMatchs;
-    }
-
-    public void setPlayerMatchs(List<Match> playerMatchs) {
-        this.playerMatchs = playerMatchs;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public int getMatchs() {
+    public float getMatchs() {
         return matchs;
     }
 
-    public void setMatchs(int matchs) {
+    public void setMatchs(float matchs) {
         this.matchs = matchs;
     }
 
@@ -108,17 +86,41 @@ public class Resume {
         this.wins = wins;
     }
 
+    public String getAccountid() {
+        return accountid;
+    }
+
+    public void setAccountid(String accountid) {
+        this.accountid = accountid;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public Match[] getListMatchs() {
+        return listMatchs;
+    }
+
+    public void setListMatchs(Match[] listMatchs) {
+        this.listMatchs = listMatchs;
+    }
+
     @Override
     public String toString() {
-        return "Resume{" +
+        return "Day{" +
                 "id='" + id + '\'' +
-                ", playerId='" + playerId + '\'' +
-                ", playerName='" + playerName + '\'' +
-                ", playerMatchs=" + playerMatchs +
-                ", updateDate=" + updateDate +
+                ", accountName='" + accountName + '\'' +
+                ", day=" + day +
+                ", kills=" + kills +
                 ", matchs=" + matchs +
                 ", ratio=" + ratio +
                 ", wins=" + wins +
+                ", accountid='" + accountid + '\'' +
                 '}';
     }
 }

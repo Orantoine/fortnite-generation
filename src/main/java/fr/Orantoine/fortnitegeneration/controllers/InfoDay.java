@@ -5,6 +5,7 @@ import fr.Orantoine.fortnitegeneration.models.Player;
 import fr.Orantoine.fortnitegeneration.models.Resume;
 import fr.Orantoine.fortnitegeneration.repositories.MatchsRepository;
 import fr.Orantoine.fortnitegeneration.repositories.PlayerRepository;
+import fr.Orantoine.fortnitegeneration.repositories.resumeRepository;
 import fr.Orantoine.fortnitegeneration.services.GetInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,53 +30,25 @@ public class InfoDay {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private resumeRepository resumeRepository;
+
     @GetMapping(value = "/health")
     public String healthCheck(){
         return "OK";
     }
 
     @GetMapping(value = "/infoplayer/{pseudo}")
-    public Resume getDay(@PathVariable String pseudo){
+    public List<Resume> getDay(@PathVariable String pseudo){
         log.info("Request type get : /infoplayer/{pseudo}");
-        Resume resume = new Resume();
-        Player player = playerRepository.findByPseudo(pseudo);
-        if (player != null) {
-            resume.setPlayerId(player.getAccountid());
-            resume.setPlayerMatchs(matchsRepository.findAllByAccountIdOrderByDateCollectedDesc(player.getAccountid()));
-            resume.setPlayerName(player.getPseudo());
-            resume.setUpdateDate(new Date());
-            GetInfo getInfo = new GetInfo(resume.getPlayerMatchs());
-            resume.setMatchs(getInfo.findNbMatch());
-            resume.setWins(getInfo.findWins());
-            resume.setRatio(getInfo.findRatio());
-            resume.setUpdateDate(new Date());
+        if (pseudo != null) {
+            List<Resume> resumes = resumeRepository.findAllByAccountNameEquals(pseudo);
             log.info("Envoie des informations");
+            return resumes;
         }
         else{
             log.error("Pseudo du joueur inconnu : " +pseudo);
-            resume.setPlayerName("Le pseudo : " + pseudo + " est inconnu. Vérifier son existance dans la bdd ou contacter notre administrateur");
         }
-        return resume;
-    }
-
-    @GetMapping(value = "/infoplayer/{pseudo}/{mode}")
-    public Resume getDataForMode(@PathVariable String pseudo, @PathVariable String mode){
-        log.info("Request type get : /infoplayer/{pseudo}/{mode}");
-        Resume resume = new Resume();
-        Player player = playerRepository.findByPseudo(pseudo);
-        if (player != null) {
-            resume.setPlayerId(player.getAccountid());
-            resume.setPlayerMatchs(matchsRepository.findAllByAccountIdAndPlaylistOrderByDateCollectedDesc(player.getAccountid(), mode));
-            GetInfo getInfo = new GetInfo(resume.getPlayerMatchs());
-            resume.setMatchs(getInfo.findNbMatch());
-            resume.setWins(getInfo.findWins());
-            resume.setRatio(getInfo.findRatio());
-            resume.setUpdateDate(new Date());
-            log.info("Envoie des informations");
-        }else{
-            log.error("Pseudo du joueur inconnu : " +pseudo);
-            resume.setPlayerName("Le pseudo : " + pseudo + " est inconnu. Vérifier son existance dans la bdd ou contacter notre administrateur");
-        }
-        return resume;
+       return null;
     }
 }
